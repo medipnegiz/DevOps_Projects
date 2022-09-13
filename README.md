@@ -8,3 +8,5 @@ My DevOps Projects  [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d730
 <hr>
 
 ## Index 📜
+
+### 🔖 [Terraform_Phonebook_Application_deployed_on_AWS](https://github.com/medipnegiz/DevOps_Projects/tree/main/Terraform_Phonebook_Application_deployed_on_AWS)
