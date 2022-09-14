@@ -13,3 +13,4 @@ My DevOps Projects  [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d730
 The Phonebook Application aims to create a phonebook application in Python and deployed as a web application with Flask on AWS Application Load Balancer with Auto Scaling Group of Elastic Compute Cloud (EC2) Instances and Relational Database Service (RDS) using Terraform.
 
 ### 🔖 [Dockerization_Bookstore_Api_on_Python_Flask_Mysql](https://github.com/medipnegiz/DevOps_Projects/tree/main/Dockerization_Bookstore_Api_on_Python_Flask_Mysql)
+Bookstore Web API Uygulaması, bir uygulamanın dockerizasyonu anlayışını Docker kullanarak bir kitapevi web hizmeti oluşturmayı amaçlamaktadır. The application code is to be deployed as a RESTful web service with Flask using Dockerfile and Docker Compose on AWS Elastic Compute Cloud (EC2) Instance using Terraform.
