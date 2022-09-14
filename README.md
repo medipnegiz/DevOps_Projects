@@ -10,5 +10,6 @@ My DevOps Projects  [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d730
 ## Index 📜
 
 ### 🔖 [Terraform_Phonebook_Application_deployed_on_AWS](https://github.com/medipnegiz/DevOps_Projects/tree/main/Terraform_Phonebook_Application_deployed_on_AWS)
+The Phonebook Application aims to create a phonebook application in Python and deployed as a web application with Flask on AWS Application Load Balancer with Auto Scaling Group of Elastic Compute Cloud (EC2) Instances and Relational Database Service (RDS) using Terraform.
 
 ### 🔖 [Dockerization_Bookstore_Api_on_Python_Flask_Mysql](https://github.com/medipnegiz/DevOps_Projects/tree/main/Dockerization_Bookstore_Api_on_Python_Flask_Mysql)
