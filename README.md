@@ -17,3 +17,5 @@ Bookstore Web API Application aims to create a bookstore web service using Docke
 
 ### 🔖 [Docker_Swarm_Deployment_of_Phonebook_App_on_Python_Flask_Mysql_Terraform](https://github.com/medipnegiz/DevOps_Projects/tree/main/Docker_Swarm_Deployment_of_Phonebook_App_on_Python_Flask_Mysql_Terraform)
 This project aims to deploy the Phonebook Application web application with Docker Swarm on Elastic Compute Cloud (EC2) Instances by pulling the app images from the AWS Elastic Container Registry (ECR) repository.
+
+### 🔖 [Kubernetes_Microservice_Phonebook]()
