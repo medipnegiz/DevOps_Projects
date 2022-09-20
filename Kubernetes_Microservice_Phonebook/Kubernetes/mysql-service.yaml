@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  labels:
+    app: mysql-deploy
+spec:
+  type: ClusterIP
+  selector:
+    app: mysql-deploy
+  ports:
+  - port: 3306
+    targetPort: 3306
+    name: mysql-port
+    protocol: TCP

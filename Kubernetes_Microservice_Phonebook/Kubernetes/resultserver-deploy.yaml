@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resultserver-deploy
+  labels:
+    app: resultserver-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: resultserver-deploy
+  template:
+    metadata:
+      labels:
+        app: resultserver-deploy
+    spec:
+      containers:
+      - name: resultserver
+        image: medipnegiz/resultserver:1.0
+        ports:
+        - containerPort: 80
+        env:
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: mysql_admin_password
+        envFrom:
+          - configMapRef:
+              name: server-config
+        resources: {}
