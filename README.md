@@ -17,3 +17,6 @@ Bookstore Web API Application aims to create a bookstore web service using Docke
 
 ### 🔖 [Docker_Swarm_Deployment_of_Phonebook_App_on_Python_Flask_Mysql_Terraform](https://github.com/medipnegiz/DevOps_Projects/tree/main/Docker_Swarm_Deployment_of_Phonebook_App_on_Python_Flask_Mysql_Terraform)
 This project aims to deploy the Phonebook Application web application with Docker Swarm on Elastic Compute Cloud (EC2) Instances by pulling the app images from the AWS Elastic Container Registry (ECR) repository.
+
+### 🔖 [Kubernetes_Microservice_Phonebook](https://github.com/medipnegiz/DevOps_Projects/tree/main/Kubernetes_Microservice_Phonebook)
+Phonebook Microservice Web Application aims to create a web application with MySQL Database using Docker and Kubernetes to give the understanding of Microservice architecture. In this application, we have a frontend service and a backend service to interact with database service. Each service will be managed by a Kubernetes deployment. The backend service will be a gateway for the application and it will serve the necessary web pages for create, delete and update operations while the frontend service will serve a search page in order to conduct read operations. To preserve the data in the database, persistent volume and persistent volume claim concepts should be adopted.
