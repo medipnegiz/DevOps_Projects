@@ -1,0 +1,45 @@
+- name: configure react instance
+  hosts: _ansible_react
+  become: true
+  tasks: 
+    - name: create build directory
+      file:
+        path: /home/ec2-user/react
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: copy files to the react node
+      copy: 
+        src: /home/ec2-user/ansible/ansible-project/react/client/
+        dest: /home/ec2-user/react
+
+    - name: copy the dockerfile
+      copy: 
+        src: /home/ec2-user/ansible/ansible-project/react/Dockerfile
+        dest: /home/ec2-user/react
+
+    - name: remove container and image if exist
+      shell: "docker ps -q --filter 'name=edip_react' && docker stop edip_react && docker rm -fv edip_react && docker image rm -f medipnegiz/react || echo 'Not Found'"
+
+    - name: build container image
+      docker_image:
+        name: medipnegiz/react
+        build:
+          path: /home/ec2-user/react
+        source: build
+        state: present
+
+    - name: create react docker container
+      docker_container:
+        name: edip_react
+        image: medipnegiz/react
+        state: started
+        ports:
+          - "3000:3000"
+      register: container_info
+
+    - name: print the container info
+      debug:
+        var: container_info

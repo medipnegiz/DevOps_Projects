@@ -1,0 +1,45 @@
+- name: configure nodejs instance
+  hosts: _ansible_nodejs
+  become: true
+  tasks: 
+    - name: create build directory
+      file:
+        path: /home/ec2-user/nodejs
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: copy files to nodejs node
+      copy: 
+        src: /home/ec2-user/ansible/ansible-project/nodejs/server/
+        dest: /home/ec2-user/nodejs
+
+    - name: copy the dockerfile
+      copy: 
+        src: /home/ec2-user/ansible/ansible-project/nodejs/Dockerfile
+        dest: /home/ec2-user/nodejs
+
+    - name: remove container and image if exist
+      shell: "docker ps -q --filter 'name=edip_nodejs' && docker stop edip_nodejs && docker rm -fv edip_nodejs && docker image rm -f medipnegiz/nodejs || echo 'Not Found'"
+
+    - name: build container image
+      docker_image:
+        name: medipnegiz/nodejs
+        build:
+          path: /home/ec2-user/nodejs
+        source: build
+        state: present
+
+    - name: create postgresql docker container
+      docker_container:
+        name: edip_nodejs
+        image: medipnegiz/nodejs
+        state: started
+        ports:
+          - "5000:5000"
+      register: container_info
+
+    - name: print the container info
+      debug:
+        var: container_info

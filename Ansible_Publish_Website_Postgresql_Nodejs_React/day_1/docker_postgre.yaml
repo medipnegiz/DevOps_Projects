@@ -1,0 +1,215 @@
+# ---
+# - name: configure postgresql node
+#   hosts: _ansible_postgresql
+#   become: true
+#   vars_files:
+#     - men_secret.yaml   # sifre icin degisken tanimlamasi yaptik. Sifre icin buraya bakacak
+#   tasks: 
+#     - name: update package
+#       yum:
+#         name: "*"       # güncelleme yapmak icin böyle yazinca sistem anliyor
+#         state: latest
+    
+#     - name: uninstall old versions
+#       yum:
+#         name: "{{ item }}"
+#         state: removed
+#       loop:
+#         - docker
+#         - docker-client
+#         - docker-client-latest
+#         - docker-common
+#         - docker-latest
+#         - docker-latest-logrotate
+#         - docker-logrotate
+#         - docker-engine
+
+#     - name: install yum-utils
+#       yum:
+#         name: yum-utils
+#         state: latest
+
+#     - name: add docker repo
+#       get_url:                  # indirilecek dosyalar icin kullanilabilir
+#         url: https://download.docker.com/linux/centos/docker-ce.repo
+#         dest: /etc/yum.repos.d/docker-ce.repo 
+
+#     - name: install docker
+#       package:
+#         name: docker-ce
+#         state: latest
+
+#     - name: install pip
+#       package: 
+#         name: python3-pip
+#         state: present
+
+#     - name: install docker sdk
+#       pip:            # pip kullaniminda "state" kullanmaya gerek yok
+#         name: docker
+
+#     - name: add ec2-user to docker group
+#       user:
+#         name: ec2-user
+#         groups: docker
+#         append: yes     # ec2-user kullanicisini diger gruplardan cikarmadan docker grubuna eklemek icin kullanilir
+
+#     - name: start docker service
+#       systemd:
+#         name: docker
+#         state: started
+#         enabled: yes
+
+#     - name: create build directory
+#       file:                   # dosya olusturmak icin kullanilir
+#         path: /home/ec2-user/postgresql
+#         state: directory      # ne olusturulacak onu belirtmek icin kullanilir
+#         owner: root
+#         group: root           # group eklemesi yaptik
+#         mode: "0755"          # dosyanin kullanici yetkilerini vermek icin kullanilir
+
+#     - name: copy the sql script
+#       copy:
+#         src: /home/ec2-user/ansible/ansible-project/postgres/init.sql
+#         dest: /home/ec2-user/postgresql
+
+#     - name: copy the dockerfile
+#       copy:
+#         src: /home/ec2-user/ansible/ansible-project/postgres/Dockerfile
+#         dest: /home/ec2-user/postgresql
+
+#     - name: remove container and image if exist
+#       shell: "docker ps -q --filter 'name=edip_postgre' && docker stop edip_postgre && docker rm -fv edip_postgre && docker image rm -f medipnegiz/postgre || echo 'Not Found'"
+
+#     - name: build container image
+#       docker_image:
+#         name: medipnegiz/postgre
+#         build:
+#           path: /home/ec2-user/postgresql
+#         source: build                     # build etmek icin bu kismi da eklemek gerekiyor
+#         state: present
+
+#     - name: create postgresql docker container
+#       docker_container:
+#         name: edip_postgre
+#         image: medipnegiz/postgre
+#         state: started                # container start etmek icin kullanilir
+#         ports:
+#           - "5432:5432"
+#         env:
+#           POSTGRES_PASSWORD: "{{ password }}"     # "men_secret.yaml" icindeki degisken verilir
+#         volumes:
+#           - /db-data:/var/lib/postgresql/data
+#       register: container_info                # ciktiyi degisken olarak tutmak icin kullanilir
+
+#     - name: print container info
+#       debug:                        # degiskenin ciktisini yazdirmak icin kullanilir
+#         var: container_info
+
+---
+- name: configure postgresql node
+  hosts: _ansible_postgresql
+  become: true
+  vars_files:
+    - men_secret.yaml
+  tasks:
+    - name: update packages
+      yum: 
+        name: "*"
+        state: latest
+
+    - name: uninstall old versions
+      yum:
+        name: "{{ item }}"
+        state: removed
+      loop:
+        - docker
+        - docker-client
+        - docker-client-latest
+        - docker-common
+        - docker-latest
+        - docker-latest-logrotate
+        - docker-logrotate
+        - docker-engine
+
+    - name: install yum-utils
+      yum:
+        name: yum-utils
+        state: latest
+
+    - name: add docker repo
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo 
+        
+    - name: install docker
+      package:
+        name: docker-ce
+        state: latest
+
+    - name: install pip
+      package: 
+        name: python3-pip
+        state: present
+
+    - name: install docker sdk
+      pip:
+        name: docker
+
+    - name: add ec2-user to docker group
+      user: 
+        name: ec2-user
+        groups: docker
+        append: yes
+
+    - name: start docker service
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: create build directory
+      file:
+        path: /home/ec2-user/postgresql
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: copy the sql script
+      copy:
+        src: /home/ec2-user/ansible/ansible-project/postgres/init.sql
+        dest: /home/ec2-user/postgresql
+    
+    - name: copy the dockerfile
+      copy:
+        src: /home/ec2-user/ansible/ansible-project/postgres/Dockerfile
+        dest: /home/ec2-user/postgresql
+
+    - name: remove container and image if exist
+      shell: "docker ps -q --filter 'name=oliver_postgre' && docker stop oliver_postgre && docker rm -fv oliver_postgre && docker image rm -f olivercw/postgre || echo 'Not Found'"
+
+    - name: build container image
+      docker_image:
+        name: olivercw/postgre
+        build:
+          path: /home/ec2-user/postgresql
+        source: build
+        state: present
+
+    - name: create postgresql docker container
+      docker_container:
+        name: oliver_postgre
+        image: olivercw/postgre
+        state: started
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_PASSWORD: "{{ password }}"
+        volumes:
+          - /db-data:/var/lib/postgresql/data
+      register: container_info
+
+    - name: print the container container_info
+      debug:
+        var: container_info

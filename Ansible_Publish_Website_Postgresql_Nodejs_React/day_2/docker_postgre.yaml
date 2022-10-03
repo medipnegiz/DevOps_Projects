@@ -1,0 +1,51 @@
+- name: configure postgresql node
+  hosts: _ansible_postgresql
+  become: true
+  vars_files:
+    - secret.yml
+  tasks: 
+    - name: create build directory
+      file:
+        path: /home/ec2-user/postgresql
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"  
+
+    - name: copy the sql script
+      copy: 
+        src: /home/ec2-user/ansible/ansible-project/postgres/init.sql
+        dest: /home/ec2-user/postgresql
+
+    - name: copy the dockerfile
+      copy: 
+        src: /home/ec2-user/ansible/ansible-project/postgres/Dockerfile
+        dest: /home/ec2-user/postgresql 
+
+    - name: remove container and image if exist
+      shell: "docker ps -q --filter 'name=edip_postgre' && docker stop edip_postgre && docker rm -fv edip_postgre && docker image rm -f medipnegiz/postgre || echo 'Not Found'"
+
+    - name: build container image
+      docker_image:
+        name: medipnegiz/postgre
+        build:
+          path: /home/ec2-user/postgresql
+        source: build
+        state: present
+
+    - name: create postgresql docker container
+      docker_container:
+        name: edip_postgre
+        image: medipnegiz/postgre
+        state: started
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_PASSWORD: "{{ password }}"
+        volumes:
+          - /db-data:/var/lib/postgresql/data
+      register: container_info
+
+    - name: print the container info
+      debug:
+        var: container_info
