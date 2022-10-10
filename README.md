@@ -3,7 +3,7 @@ My DevOps Projects  [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d730
 <hr>
 
 <p align="center">
-    <img alt="Python" src="https://cdn.worldvectorlogo.com/logos/devops-2.svg" height="300" width="455">
+    <img alt="Python" src="https://cdn.worldvectorlogo.com/logos/devops-2.svg" height="250" width="455">
 </p>
 <hr>
 
